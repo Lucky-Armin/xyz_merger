@@ -1,0 +1,8 @@
+# object files
+*.o
+
+# executables
+xyz_merger
+
+# output files
+merged_trajectory.xyz
