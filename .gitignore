@@ -6,3 +6,6 @@ xyz_merger
 
 # output files
 merged_trajectory.xyz
+
+# VS Code settings
+.vscode
