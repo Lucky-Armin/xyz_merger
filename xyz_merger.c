@@ -32,8 +32,6 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	FILE *output_file = fopen(output_filename, "w");
-
 	int i = 0;
 	int j = 0;
 	enum
@@ -50,23 +48,48 @@ int main(int argc, char *argv[])
 	int NATOMS_new = 0;
 	char atom1[3];
 	char atom2[3];
-	double line_count = 1;
-	int number_of_frames = 0;
+	double line_count1 = 1;
+	double line_count2 = 1;
+	int number_of_frames1 = 0;
+	int number_of_frames2 = 0;
 
 	// determine the number of frames to be merged from the first input file
 	fgets(line1, sizeof(line1), input_file1);
 	sscanf(line1, "%d", &NATOMS1);
 	while (fgets(line1, sizeof(line1), input_file1) != NULL)
 	{
-		line_count++;
+		line_count1++;
 	}
 
-	number_of_frames = round(line_count / (NATOMS1 + 2));
+	number_of_frames1 = round(line_count1 / (NATOMS1 + 2));
 
 	fclose(input_file1);
-	input_file1 = fopen(input_filename1, "r");
 
-	for (j = 0; j < number_of_frames; j++)
+	// determine the number of frames in the second input file to check if it is equal to the number of frames in the first input file
+	fgets(line2, sizeof(line2), input_file2);
+	sscanf(line2, "%d", &NATOMS2);
+	while (fgets(line2, sizeof(line2), input_file2) != NULL)
+	{
+		line_count2++;
+	}
+
+	number_of_frames2 = round(line_count2 / (NATOMS2 + 2));
+
+	fclose(input_file2);
+
+	// check if the number of frames in the two input files is equal otherwise exit
+
+	if (number_of_frames1 != number_of_frames2)
+	{
+		printf("Error: The number of frames in the two input files is not equal!\n*******************************************\n****************  EXITING  ****************\n*******************************************\n");
+		return 1;
+	}
+
+	input_file1 = fopen(input_filename1, "r");
+	input_file2 = fopen(input_filename2, "r");
+	FILE *output_file = fopen(output_filename, "w");
+
+	for (j = 0; j < number_of_frames1; j++)
 	{
 
 		// reading of the 1st line
